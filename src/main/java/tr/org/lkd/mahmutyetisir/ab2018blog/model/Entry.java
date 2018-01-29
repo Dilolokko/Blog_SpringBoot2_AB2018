@@ -4,11 +4,14 @@ package tr.org.lkd.mahmutyetisir.ab2018blog.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -32,6 +35,7 @@ public class Entry {
 
     @NotNull
     @Column(name = "CREATE_DATE")
+    @DateTimeFormat(pattern = "YYYY-MM-dd")
     private LocalDate createDate = LocalDate.now();
 
     @NotEmpty
@@ -40,5 +44,10 @@ public class Entry {
 
     @Column(name = "IS_DELETED")
     private Boolean isDeleted;
+
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
+    @JoinColumn(name = "ENTRY_ID")
+    List<Like> likes = new ArrayList<>();
 
 }

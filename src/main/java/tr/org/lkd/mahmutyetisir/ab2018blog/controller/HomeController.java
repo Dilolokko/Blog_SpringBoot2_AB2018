@@ -74,4 +74,42 @@ public class HomeController {
 
     }
 
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.GET)
+    public String getUpdateEtry(@PathVariable("id") Integer id, Model model){
+        Optional<Entry> optionalEntry = entryRepository.findById(id);
+        if(!optionalEntry.isPresent()){
+            log.warn("Entry with {} id is not present", id);
+            return "index";
+        }
+        else {
+            model.addAttribute("entry" ,optionalEntry.get());
+            return "entries/updateEntry";
+        }
+    }
+
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
+    public String postUpdateEntry(@Valid @ModelAttribute Entry entry, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return "entries/updateEntry";
+        }
+        else {
+            entryRepository.save(entry);
+            System.out.println(entry.toString());
+            return "redirect:/blog";
+        }
+    }
+
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+    public String deleteEntry(@PathVariable("id") Integer id){
+        Optional<Entry> optionalEntry = entryRepository.findById(id);
+        if(!optionalEntry.isPresent()){
+            log.warn("Entry with {} id is not present", id);
+            return "redirect:/blog";
+        }
+        else {
+            entryRepository.delete(optionalEntry.get());
+            return "redirect:/blog";
+        }
+    }
+
 }

@@ -10,18 +10,36 @@
     <title>Title</title>
 </head>
 <body>
-<div class="col-md-3 container">
-    <table class="table">
+<div class="col-md-6 container">
+    <table class="table" >
         <thead>
         <tr>
+            <th>Id</th>
             <th>Title</th>
             <th>Description</th>
+            <th>Using</th>
+            <th>Likes</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="entry : ${entries}">
+            <td th:text="*{entry.id}"></td>
             <td th:text="*{entry.title}"></td>
             <td th:text="*{entry.body}"></td>
+            <td>
+                <form method="post" th:action="@{'/blog/'+ ${entry.id}+'/delete'}">
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </td>
+            <td>
+                <table>
+                    <tbody>
+                        <tr th:each="like : ${entry.likes}" >
+                            <td th:text="*{like.username}" class="list-group-item list-group-item-primary"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
         </tr>
         </tbody>
     </table>
