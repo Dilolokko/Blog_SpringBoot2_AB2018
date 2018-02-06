@@ -12,6 +12,7 @@ import tr.org.lkd.mahmutyetisir.ab2018blog.Repository.EntryRepository;
 import tr.org.lkd.mahmutyetisir.ab2018blog.model.Entry;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Slf4j
@@ -25,12 +26,20 @@ public class HomeController {
     @Autowired
     ApplicationContext applicationContext;
 
+    @GetMapping("/login")
+    public String getLoginPage(){
+        return "login";
+    }
+
+
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String getIndex(Model model){
 
         Iterable<Entry> entries = entryRepository.findAll();
+        Iterable<Entry> todaysEntries = entryRepository.findByCreateDate(LocalDate.now());
+
         model.addAttribute("entries",entries);
-        entryRepository.findAll();
+        model.addAttribute("todayEntries", todaysEntries);
 
         return "entries/listEntries";
     }
